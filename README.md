@@ -114,6 +114,63 @@ tgbot-mcp run
 2. В качестве команды запуска укажите `tgbot-mcp run` (при необходимости — полный путь к исполняемому файлу). ChatGPT автоматически создаст STDIO-процесс и подключится к инструментам.
 3. После подключения в панели MCP появятся два инструмента: `telegram_list_groups` и `telegram_search_messages`. Теперь ChatGPT сможет вызывать их по необходимости.
 
+## Развёртывание на Ubuntu VPS
+
+Ниже — пример развёртывания на чистом сервере Ubuntu 22.04+. Выполняйте команды под пользователем с правами `sudo`.
+
+1. Установите системные зависимости и создайте отдельного пользователя (опционально):
+
+   ```bash
+   sudo apt update
+   sudo apt install -y git python3.11 python3.11-venv
+   sudo adduser --disabled-password --gecos "" tgbot
+   sudo usermod -aG sudo tgbot
+   ```
+
+   Если пользователь уже существует, достаточно установить пакеты.
+
+2. Авторизуйтесь под созданным пользователем и подготовьте рабочий каталог:
+
+   ```bash
+   sudo -iu tgbot
+   git clone https://github.com/<ваш-аккаунт>/<репозиторий>.git
+   cd <репозиторий>
+   python3.11 -m venv .venv
+   source .venv/bin/activate
+   pip install --upgrade pip
+   pip install .
+   ```
+
+3. Создайте файл `.env` с параметрами Telegram и выполните вход:
+
+   ```bash
+   nano .env  # или любой другой редактор
+   tgbot-mcp login
+   ```
+
+   Сессия сохранится по пути из `.env` (`TELEGRAM_SESSION_PATH` или `TELEGRAM_SESSION_STRING`).
+
+4. Для долговременного запуска можно воспользоваться `tmux` или `systemd`. Пример через `tmux`:
+
+   ```bash
+   tmux new -s tgbot-mcp
+   tgbot-mcp run
+   ```
+
+   Сессия `tmux` сохранит процесс при обрыве SSH. Для `systemd` создайте юнит с командой `ExecStart=/home/tgbot/<репозиторий>/.venv/bin/tgbot-mcp run`.
+
+### Подключение ChatGPT к удалённому серверу
+
+В окне добавления локального MCP сервера в ChatGPT укажите команду, запускающую сервер по SSH:
+
+```bash
+ssh -T tgbot@<ваш-vps> 'cd <репозиторий> && source .venv/bin/activate && tgbot-mcp run'
+```
+
+- Используйте SSH-ключи, чтобы избежать запроса пароля.
+- Убедитесь, что переменные окружения и `.env` доступны на сервере.
+- Если используете `systemd`, команда может быть проще: `ssh -T tgbot@<ваш-vps> 'systemctl --user start tgbot-mcp.service && journalctl --user -fu tgbot-mcp.service'`.
+
 ## Форматы инструментов
 
 ### telegram_list_groups
