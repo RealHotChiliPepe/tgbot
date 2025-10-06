@@ -1,0 +1,25 @@
+[project]
+name = "telegram-mcp"
+version = "0.1.0"
+description = "MCP server that exposes Telegram account tools for ChatGPT"
+authors = [{ name = "Your Name" }]
+requires-python = ">=3.12"
+dependencies = [
+    "telethon>=1.37.0",
+    "mcp>=1.16.0",
+    "pydantic>=2.11.0",
+    "pydantic-settings>=2.11.0",
+    "python-dotenv>=1.0.0"
+]
+readme = "README.md"
+license = { text = "MIT" }
+
+[project.optional-dependencies]
+dev = ["ruff>=0.8.0", "pytest>=8.0.0"]
+
+[project.scripts]
+telegram-mcp = "tgbot_mcp.__main__:main"
+telegram-authorize = "tgbot_mcp.authorize:main"
+
+[tool.uv]
+dev-dependencies = ["ruff>=0.8.0", "pytest>=8.0.0"]
