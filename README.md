@@ -15,14 +15,60 @@
 - Python 3.11 или новее.
 - Зарегистрированное Telegram API приложение (получите `api_id` и `api_hash` на <https://my.telegram.org>). 
 
+## Быстрый запуск
+
+1. Создайте виртуальное окружение и установите пакет:
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install --upgrade pip
+   pip install .
+   ```
+
+2. Задайте параметры доступа к Telegram. Проще всего — через файл `.env` в корне проекта:
+
+   ```env
+   TELEGRAM_API_ID=123456
+   TELEGRAM_API_HASH=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   TELEGRAM_SESSION_PATH=~/.tgbot_mcp/telegram.session
+   ```
+
+   При наличии строки сессии используйте `TELEGRAM_SESSION_STRING` вместо `TELEGRAM_SESSION_PATH`.
+
+3. Выполните интерактивный вход один раз, чтобы создать сессию:
+
+   ```bash
+   tgbot-mcp login
+   ```
+
+   Укажите номер телефона, код подтверждения и (если настроено) пароль 2FA.
+
+4. Проверьте авторизацию и при необходимости отладьте настройки:
+
+   ```bash
+   tgbot-mcp whoami
+   ```
+
+   В ответ появится информация о текущем аккаунте Telegram.
+
+5. Запустите MCP сервер и держите терминал открытым, пока им пользуетесь:
+
+   ```bash
+   tgbot-mcp run
+   ```
+
+   ChatGPT в режиме MCP подключится к STDIO‑процессу и сможет вызывать инструменты.
+
 ## Установка
 
+Вместо локального виртуального окружения можно установить CLI глобально через [pipx](https://pipx.pypa.io/):
+
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install .
+pipx install .
 ```
+
+При таком варианте команда `tgbot-mcp` станет доступна во всей системе, а сессию и `.env` всё равно можно хранить в домашнем каталоге.
 
 ## Настройка окружения
 
