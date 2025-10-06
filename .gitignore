@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.session
+*.session-journal
+.env
+.env.*
+.venv/
+.eggs/
+build/
+dist/
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
